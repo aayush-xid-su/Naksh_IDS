@@ -1,0 +1,752 @@
+📍 CURRENT PHASE OVERVIEW
+Project Type
+
+Real-Time Intrusion Detection & SOC Intelligence Platform (Windows-first)
+
+Core Pillars
+
+ML-based Detection
+
+Real-time Streaming
+
+SOC Correlation Engine
+
+Alerting + Intelligence
+
+Observability & Hardening
+
+Production Readiness
+
+🧩 ITERATION 2.7 — Stability, Validation & Signal Quality
+
+Goal: Ensure model + stream + SOC logic is reliable, deterministic, and debuggable.
+
+✅ 2.7.1 Model Integrity & Consistency
+Implement
+
+Validate model input shape at runtime
+
+Lock feature order
+
+Enforce deterministic inference
+
+Tasks
+
+Assert X.shape[1] == model.n_features_in_
+
+Log feature mismatch clearly
+
+Force n_jobs=1 for inference
+
+Add prediction distribution logging (temporary)
+
+Files
+
+realtime/main.py
+
+realtime/preprocessing.py
+
+models/ids_model.pkl (re-export cleanly)
+
+✅ 2.7.2 Stream Reliability Layer
+Implement
+
+Graceful dataset exhaustion handling
+
+Batch counters
+
+Stream restart safety
+
+Tasks
+
+Ensure generator never breaks silently
+
+Add batch index persistence
+
+Prevent infinite loops on empty CSV
+
+Files
+
+realtime/stream.py
+
+✅ 2.7.3 SOC Signal Validation
+Implement
+
+Noise detection
+
+Low-signal suppression
+
+Tasks
+
+If attack_ratio == 0 for N batches → downgrade severity
+
+Detect “flatline” predictions
+
+Tag events as LOW_CONFIDENCE if model outputs single class repeatedly
+
+✅ 2.7.4 Warning & Error Hygiene
+Implement
+
+Controlled warning suppression
+
+Structured error messages
+
+Tasks
+
+Suppress sklearn parallel warnings
+
+Convert silent failures → explicit logs
+
+📌 Deliverables of Iteration 2.7
+
+✔ Stable execution
+✔ No silent failures
+✔ Clean SOC events
+✔ Deterministic ML behavior
+
+🚀 ITERATION 2.8 — Alert Escalation Engine
+
+Goal: Decide when something is worth waking up a SOC analyst.
+
+Implement
+2.8.1 Alert Threshold Engine
+
+Dynamic thresholds (not hardcoded)
+
+Severity escalation
+
+LOW → MEDIUM → HIGH → CRITICAL
+
+2.8.2 Alert Cooldown Logic
+
+Prevent alert spam
+
+Time-based suppression
+
+2.8.3 Alert Payload Enrichment
+
+MITRE tactic + technique
+
+Confidence score
+
+Attack timeline
+
+🧠 ITERATION 2.9 — Threat Campaign Correlation
+
+Goal: Detect multi-step attacks instead of single anomalies.
+
+Implement
+2.9.1 Campaign IDs
+
+Link multiple batches to one attack
+
+Time-window correlation
+
+2.9.2 Kill-Chain Mapping
+
+Recon → Initial Access → Lateral → C2
+
+2.9.3 Confidence Accumulation
+
+Campaign confidence increases over time
+
+🧪 ITERATION 3.0 — Detection Depth Expansion
+
+Goal: Improve accuracy beyond supervised ML.
+
+Implement
+3.0.1 Anomaly Detection
+
+Isolation Forest
+
+Autoencoders (optional)
+
+3.0.2 Ensemble Voting
+
+ML + Anomaly + Heuristics
+
+3.0.3 False Positive Dampening
+
+Adaptive thresholds
+
+🧷 ITERATION 3.1 — Host & Process Intelligence (Windows)
+
+Goal: Move from “network-only” to endpoint-aware SOC.
+
+Implement
+3.1.1 Process Monitoring
+
+Suspicious parent-child chains
+
+Unsigned binaries
+
+3.1.2 Persistence Detection
+
+Registry autoruns
+
+Scheduled tasks
+
+3.1.3 Local IOC Cache
+
+Hashes
+
+IPs
+
+Domains
+
+🌐 ITERATION 3.2 — Threat Intelligence Integration
+
+Goal: External context for internal signals.
+
+Implement
+3.2.1 Threat Feed Ingestion
+
+Open-source feeds (simulated first)
+
+IP/domain reputation
+
+3.2.2 Confidence Boosting
+
+Internal signal + external intel
+
+3.2.3 Intel Aging
+
+Expire stale indicators
+
+📊 ITERATION 3.3 — SOC Dashboard & Visualization
+
+Goal: Make it usable by humans.
+
+Implement
+3.3.1 Real-time Dashboard
+
+Alerts
+
+Campaigns
+
+Trends
+
+3.3.2 Timeline View
+
+Attack progression
+
+3.3.3 Analyst Controls
+
+Acknowledge alerts
+
+Suppress signals
+
+🔔 ITERATION 3.4 — Notification & Response
+
+Goal: Close the SOC loop.
+
+Implement
+3.4.1 Alert Channels
+
+Console
+
+Email (optional)
+
+Webhook
+
+3.4.2 Automated Response (Safe)
+
+Block IP (simulated)
+
+Kill process (simulated)
+
+Quarantine event
+
+📦 ITERATION 3.5 — Forensics & Evidence
+
+Goal: Post-incident investigation.
+
+Implement
+3.5.1 Evidence Snapshots
+
+Batch data
+
+Feature vectors
+
+3.5.2 Event Replay
+
+Re-run detection on old data
+
+3.5.3 Audit Logs
+
+Tamper-evident structure
+
+🔐 ITERATION 3.6 — Security Hardening
+
+Goal: Secure the SOC platform itself.
+
+Implement
+
+Signed configs
+
+Integrity checks
+
+Anti-tampering
+
+Secure secrets handling
+
+🚢 ITERATION 3.7 — Packaging & Deployment
+
+Goal: Production readiness.
+
+Implement
+
+Windows service
+
+Docker (optional)
+
+Resource monitoring
+
+Config-driven startup
+
+🎓 ITERATION 3.8 — Documentation & Demo Readiness
+
+Goal: Make it explainable & presentable.
+
+Implement
+
+Architecture diagrams
+
+Threat model
+
+Demo scripts
+
+README + whitepaper
+
+ITERATION 4.x — Intelligence & Learning Phase
+
+Goal: Make the system adapt and learn like a real SOC.
+
+🔸 4.0 — Online & Continual Learning
+
+Model adapts to new traffic patterns
+
+Drift detection
+
+Automatic retraining triggers
+
+Why it matters:
+Real networks change daily.
+
+🔸 4.1 — Adversarial ML Defense
+
+Detect evasion attempts
+
+Feature poisoning detection
+
+Confidence decay on suspicious inputs
+
+🔸 4.2 — Self-Healing Detection
+
+Auto-rollback bad models
+
+Performance degradation alerts
+
+Shadow model testing
+
+🧬 ITERATION 5.x — Zero Trust & Deep Security
+
+Goal: Align with modern enterprise security architectures.
+
+🔸 5.0 — Zero Trust Enforcement
+
+Device trust scores
+
+User behavior profiling
+
+Context-aware access decisions
+
+🔸 5.1 — Identity & UEBA
+
+User and Entity Behavior Analytics
+
+Insider threat detection
+
+Privilege escalation tracking
+
+🔸 5.2 — Lateral Movement Graphs
+
+Host-to-host attack graphs
+
+Graph-based anomaly detection
+
+🌐 ITERATION 6.x — Large-Scale & Distributed SOC
+
+Goal: Handle real enterprise traffic.
+
+🔸 6.0 — Distributed Processing
+
+Kafka / message queues
+
+Multi-sensor ingestion
+
+Horizontal scaling
+
+🔸 6.1 — Multi-Tenant SOC
+
+Per-org isolation
+
+RBAC
+
+SOC analyst roles
+
+🔸 6.2 — Cloud + Hybrid Visibility
+
+Cloud logs (AWS / Azure / GCP)
+
+SaaS telemetry
+
+Cross-environment correlation
+
+🧪 ITERATION 7.x — Research & Academic Grade
+
+Goal: Publishable, defensible system.
+
+🔸 7.0 — Formal Threat Modeling
+
+STRIDE / MITRE mapping
+
+Attack surface modeling
+
+🔸 7.1 — Explainable AI (XAI)
+
+SHAP / LIME
+
+Feature importance over time
+
+Analyst-friendly explanations
+
+🔸 7.2 — Benchmarking & Evaluation
+
+Compare against Snort / Suricata
+
+Public datasets evaluation
+
+ROC, PR, latency metrics
+
+🧠 ITERATION 8.x — Autonomous SOC (Advanced)
+
+Goal: Minimal human involvement.
+
+🔸 8.0 — Autonomous Response Engine
+
+Risk-based automated actions
+
+Policy-driven remediation
+
+🔸 8.1 — AI SOC Copilot
+
+Natural language investigation
+
+“Why was this flagged?”
+
+“Show similar attacks”
+
+🔸 8.2 — Predictive Defense
+
+Forecast likely attack paths
+
+Pre-emptive hardening suggestions
+
+ITERATION 4.x — INTELLIGENCE & ADAPTATION LAYER
+
+Theme: The system learns, adapts, and defends itself
+Status: Advanced SOC-grade
+
+🔹 4.0 — Online / Continual Learning
+🎯 Goal
+
+Adapt the detection model to new traffic patterns without retraining from scratch.
+
+✅ What You Already Have
+
+Batch-based prediction
+
+Static trained model
+
+Preprocessing pipeline
+
+➕ What to ADD
+1. Data Drift Detection
+
+Detect changes in input distribution.
+
+Implement
+
+Feature-wise statistics tracking
+
+Population Stability Index (PSI)
+
+KL-divergence for numeric features
+
+# drift/psi.py
+def calculate_psi(expected, actual):
+    ...
+
+
+Trigger conditions
+
+PSI > 0.25 → major drift
+
+PSI > 0.1 → moderate drift
+
+2. Incremental Model Training
+
+Use partial_fit models (SGD, Naive Bayes)
+
+OR rolling retraining window
+
+Architecture
+
+data_buffer/
+ ├── day_1.parquet
+ ├── day_2.parquet
+model_registry/
+ ├── active.pkl
+ ├── shadow.pkl
+
+3. Model Promotion Logic
+
+Train shadow model
+
+Compare metrics
+
+Promote only if better
+
+📌 Output
+
+Model adapts over time
+
+No manual retraining
+
+🔹 4.1 — Adversarial ML Defense
+🎯 Goal
+
+Detect attempts to evade or poison the model.
+
+➕ What to ADD
+1. Feature Sanity Checks
+
+Impossible values
+
+Sudden entropy spikes
+
+Uniform noise injection
+
+if feature_entropy > threshold:
+    mark_adversarial()
+
+2. Prediction Confidence Decay
+
+Penalize predictions near decision boundary
+
+Flag low-confidence batches
+
+3. Input Validation Firewall
+
+Add a ML firewall before prediction.
+
+stream → validation → model → alert
+
+📌 Output
+
+Evasion-resistant model
+
+Reduced false negatives
+
+🔹 4.2 — Self-Healing System
+🎯 Goal
+
+System protects itself, not just the network.
+
+➕ What to ADD
+1. Model Health Monitoring
+
+Accuracy trend
+
+False positive rate
+
+Latency spikes
+
+2. Auto Rollback
+
+Revert to last good model if degradation detected
+
+if accuracy_drop > 5%:
+    rollback_model()
+
+3. Shadow Deployment
+
+Run two models silently
+
+Compare outputs
+
+📌 Output
+
+Never “dies” in production
+
+Stable SOC operations
+
+🧬 ITERATION 5.x — ZERO TRUST & BEHAVIORAL INTELLIGENCE
+
+Theme: Trust nothing, verify everything
+
+🔹 5.0 — Zero Trust Enforcement
+➕ What to ADD
+1. Entity Trust Scores
+
+Device risk score
+
+IP reputation score
+
+User behavior score
+
+trust_score = base - anomalies + history
+
+2. Context-Aware Policies
+
+Same action → different response
+
+Based on trust + time + location
+
+📌 Output
+
+SOC-grade Zero Trust engine
+
+🔹 5.1 — UEBA (User & Entity Behavior Analytics)
+➕ What to ADD
+1. Behavior Baselines
+
+Login times
+
+Command frequency
+
+Resource access
+
+2. Insider Threat Detection
+
+Deviations from baseline
+
+Slow, stealthy attacks
+
+📌 Output
+
+Insider attack detection
+
+Behavioral intelligence
+
+🔹 5.2 — Lateral Movement Graph
+➕ What to ADD
+1. Network Graph Construction
+
+Nodes = hosts/users
+
+Edges = connections
+
+2. Graph Anomaly Detection
+
+Unexpected paths
+
+Privilege jumps
+
+📌 Output
+
+Visual attack paths
+
+Post-exploitation detection
+
+🌐 ITERATION 6.x — ENTERPRISE SCALE
+
+Theme: Real-world traffic & scale
+
+🔹 6.0 — Distributed Processing
+➕ What to ADD
+
+Kafka / Redis streams
+
+Sensor-based ingestion
+
+Horizontal workers
+
+🔹 6.1 — Multi-Tenant SOC
+➕ What to ADD
+
+Org isolation
+
+RBAC roles
+
+Analyst permissions
+
+🔹 6.2 — Cloud + Hybrid Logs
+➕ What to ADD
+
+AWS CloudTrail
+
+Azure Sentinel
+
+SaaS logs
+
+🧪 ITERATION 7.x — RESEARCH & EXPLAINABILITY
+
+Theme: Trust, transparency, validation
+
+🔹 7.0 — Threat Modeling
+➕ What to ADD
+
+STRIDE mapping
+
+Attack surface models
+
+🔹 7.1 — Explainable AI (XAI)
+➕ What to ADD
+
+SHAP / LIME
+
+Per-alert explanations
+
+Feature impact timelines
+
+🔹 7.2 — Benchmarking
+➕ What to ADD
+
+Compare with Snort / Suricata
+
+Precision/Recall
+
+Latency metrics
+
+🤖 ITERATION 8.x — AUTONOMOUS SOC (FINAL BOSS)
+
+Theme: Minimal human intervention
+
+🔹 8.0 — Autonomous Response
+➕ What to ADD
+
+Auto IP blocking
+
+Policy-based actions
+
+Rollback safeguards
+
+🔹 8.1 — AI SOC Copilot
+➕ What to ADD
+
+Natural language queries
+
+Incident summaries
+
+Analyst guidance
+
+🔹 8.2 — Predictive Defense
+➕ What to ADD
+
+Attack path prediction
+
+Proactive hardening
+
+Risk forecasting
